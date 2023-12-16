@@ -6,9 +6,7 @@ jobs:
         timeout-minutes: 10
         steps:
             - name: Install Dependencies
-              run: npm install
-            - name: Build
-              run: npm run build;
+              run: npm install;
             
             - name: Run Lighthouse CI
               run: |
