@@ -9,6 +9,8 @@
   "author": "Ivan Ferreira",
   "license": "ISC",
   "dependencies": {
-    "cypress": "^13.6.1"
+    "cypress": "^13.6.1",
+    "lighthouse": "^11.4.0",
+    "lighthouse-ci": "^1.13.1"
   }
 }
