@@ -1,23 +1,24 @@
-name: LH Audits
+name: CI
 on: [push]
 jobs:
-    run_lighthouse:
-        runs-on: ubuntu-latest
-        timeout-minutes: 10
-        steps:
-            - name: Install Dependencies
-              run: npm install;
-            
-            - name: Run Lighthouse CI
-              run: |
-                npm install -g @lhci/cli@0.6.x
-                lhci autorun --disable-network-throttling --disable-cpu-throttling
-              env:
-                LHCI_GITHUB_TOKEN: ${{ secrets.LIGHTHOUSE_CHECK_GITHUB_ACCESS_TOKEN }}
-            
-            - name: Save lighthouse results
-              if: always()
-              uses: actions/upload-artifact@v2
-              with:
-                name: lighthouse-results
-                path: .lighthouseci # This will save the lighthouse as .json files
+  lhci:
+    name: Lighthouse
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - name: npm install, build
+        run: |
+          npm install
+          npm run build
+      - name: run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli@0.13.x
+          lhci autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
