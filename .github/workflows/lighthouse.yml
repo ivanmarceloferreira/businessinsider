@@ -1,23 +1,19 @@
-name: CI
+name: LH Audits 
 on: [push]
 jobs:
-  lhci:
-    name: Lighthouse
+  run_lighthouse:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      - name: Use Node.js 16.x
+      - name: Use Node.js 18
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
-      - name: npm install
+          node-version: 18
+      - name: Install Dependencies
         run: |
           npm install
-      - name: run Lighthouse CI
+      - name: Run Lighthouse CI
         run: |
           npm install -g @lhci/cli@0.13.x
-          lhci autorun
-        env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          lhci autorun --disable-network-throttling --disable-cpu-throttling
